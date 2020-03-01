@@ -16,4 +16,4 @@
 //= require_tree .
 //= require jquery
 //= require popper.js/dist/popper
-//= require bootstrap/dist/js/bootstrap\
+//= require bootstrap/dist/js/bootstrap
