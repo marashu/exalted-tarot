@@ -1,0 +1,47 @@
+<div class="row">
+    <div class='col-md-12'>
+        <h1><%= @spread.name %></h1>
+        <h2><%= @spread.description %></h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 spread-table">
+        <% (0..5).each do |i| %>
+            <div class="row spread-row">
+            <% (0..5).each do |j| %>
+                <div class="col-md-2 position-<%=j%>-<%=i%>">
+                </div>
+            <% end %>
+            </div>
+        <% end %>
+    </div>
+</div>
+<script>
+    $( document ).ready(function(){
+        $('.position-0-0').html('<%= image_tag 'deck.png' %>');
+        var cards = [];
+        <% @cards.each.with_index do |card, index| %>
+            cards[<%=index%>] = [];
+            cards[<%=index%>]['name'] = "<%=card.name%>"
+            cards[<%=index%>]['description'] = "<%=card.description%>"
+        <% end %>
+        $('.position-0-0 img').click(function(){
+            //clear the sheet
+            for(var i = 0; i <= 5; i++)
+                for(var j = 0; j <= 5; j++)
+                    if(i != 0 && j != 0)
+                        $('position-' + i + '-' + j).html('');
+            //for now, just hard populate 5 positions
+            //but later, get these from the database
+            var random = [];
+            while(random.length < <%= @spread.spread_positions.length %>){
+                var r = Math.floor(Math.random() * cards.length);
+                if(random.indexOf(r) === -1) random.push(r);
+            }
+            <% @spread.spread_positions.each.with_index do |position, index| %>
+            $('.position-' + <%=position.x%> + '-' + <%=position.y%>).html(cards[random[<%=index%>]]['name'] + "<br><br>" +  cards[random[<%=index%>]]['description'] + "<br><br><%=position.description%>");
+            <% end %>
+
+        });
+    });
+</script>
